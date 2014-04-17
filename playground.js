@@ -5,9 +5,9 @@ var cv = require('opencv');
 var http    = require('http');
 var fs = require('fs');
 
-drone_ip = "192.168.43.151"
-var options = {ip:drone_ip};
-//var options = {}
+//drone_ip = "192.168.43.151"
+//var options = {ip:drone_ip};
+var options = {}
 var client = arDrone.createClient(options);
 //client.takeoff()
 client.disableEmergency();
