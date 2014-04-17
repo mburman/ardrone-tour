@@ -7,7 +7,8 @@
 
   <body>
     <div id="container" >
-      <div id="title"></div>
+      <div id="title"><p> Drone Tour </p></div>
+      <div id="overlay"></div>
       <img id="video" name="video" style="max-width:100%">
     </div>
 
@@ -31,26 +32,27 @@
         $("#video").attr("src", "http://localhost:5555")
       }
 
-      oldTitle = "";
-      $("#title").hide();
-      function reloadTitle() {
-        url = "http://localhost:8000/title"
+      // GET OVERLAY FOR IMAGE.
+      oldoverlay = "";
+      $("#overlay").hide();
+      function reloadOverlay() {
+        url = "http://localhost:8000/overlay"
         $.get(url,{ "_": $.now() }, function(data){
           console.log("here", data)
-          if (data != oldTitle) {
-            $("#title").fadeIn(300)
-            $( "#title" ).text(data);
+          if (data != oldoverlay) {
+            $("#overlay").fadeIn(300)
+            $( "#overlay" ).text(data);
             } else {
-            $("#title").fadeOut(300);
+            $("#overlay").fadeOut(300);
           }
-          oldTitle = data;
+          oldoverlay = data;
         });
       }
 
       //reloadVideo()
-      //reloadTitle()
+      //reloadoverlay()
       setInterval(reloadVideo, 50)
-      setInterval(reloadTitle, 1000)
+      setInterval(reloadOverlay, 1000)
     </script>
   </body>
 </html>
