@@ -1,0 +1,45 @@
+// Run this to receive a png image stream from your drone.
+
+var arDrone = require('ar-drone');
+var cv = require('opencv');
+var http    = require('http');
+var fs = require('fs');
+
+drone_ip = "192.168.43.151"
+var options = {ip:drone_ip};
+var client = arDrone.createClient(options);
+//client.takeoff()
+client.disableEmergency();
+var pngStream = client.getPngStream();
+var processingImage = false;
+var lastPng;
+var navData;
+var startTime = new Date().getTime();
+var log = function(s){
+  var time = ( ( new Date().getTime() - startTime ) / 1000 ).toFixed(2);
+  console.log(time+" \t"+s);
+}
+
+pngStream
+.on('error', function(err) {
+  console.log("There was an error: " + err)
+})
+.on('data', function(pngBuffer) {
+  lastPng = pngBuffer;
+});
+
+var server = http.createServer(function(req, res) {
+  fs.createReadStream(__dirname + "/video.html").pipe(res);
+  if (!lastPng) {
+    res.writeHead(503);
+    res.end('Did not receive any png data yet.');
+    return;
+  }
+
+  res.writeHead(200, {'Content-Type': 'image/png'});
+  res.end(lastPng);
+});
+
+server.listen(5555, function() {
+  console.log('Serving latest png on port 5555 ...');
+});

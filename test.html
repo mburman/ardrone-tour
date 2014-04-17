@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <script src="js/jquery-2.1.0.min.js"></script>
+    <link rel="stylesheet" href="./css/style.css">
+    <title>DRONE FLIGHT</title>
+  </head>
+
+  <body>
+    <div id="container" >
+      <div id="title">Hamerschlag Hall</div>
+      <img id="video" name="video" style="max-width:100%">
+    </div>
+
+    <script>
+      function reload() {
+        var video = document.getElementsByName("video")[0];
+        $.ajax({
+          url:'http://localhost:5555',
+          type:'HEAD',
+          error: function()
+          {
+            video.src = "./sample.jpg"
+          },
+          success: function()
+          {
+            video.src = "http://localhost:5555"
+          }
+        });
+      }
+      reload()
+      //setInterval(reload, 50)
+
+
+
+    </script>
+  </body>
+</html>
