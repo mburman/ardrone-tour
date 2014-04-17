@@ -5,8 +5,9 @@ var cv = require('opencv');
 var http    = require('http');
 var fs = require('fs');
 
-drone_ip = "192.168.43.151"
-var options = {ip:drone_ip};
+//drone_ip = "192.168.43.151"
+//var options = {ip:drone_ip};
+var options = {}
 var client = arDrone.createClient(options);
 //client.takeoff()
 client.disableEmergency();
@@ -29,7 +30,7 @@ pngStream
 });
 
 var server = http.createServer(function(req, res) {
-  fs.createReadStream(__dirname + "/video.html").pipe(res);
+  //fs.createReadStream(__dirname + "/video.html").pipe(res);
   if (!lastPng) {
     res.writeHead(503);
     res.end('Did not receive any png data yet.');

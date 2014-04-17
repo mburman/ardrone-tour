@@ -7,14 +7,14 @@
 
   <body>
     <div id="container" >
-      <div id="title">Hamerschlag Hall</div>
+      <div id="title"></div>
       <img id="video" name="video" style="max-width:100%">
     </div>
 
     <script>
-      function reload() {
+      function reloadVideo() {
         var video = document.getElementsByName("video")[0];
-        $.ajax({
+        /*$.ajax({
           url:'http://localhost:5555',
           type:'HEAD',
           error: function()
@@ -26,12 +26,31 @@
             video.src = "http://localhost:5555"
           }
         });
+        */
+        // video.src = "http://localhost:5555"
+        $("#video").attr("src", "http://localhost:5555")
       }
-      reload()
-      //setInterval(reload, 50)
 
+      oldTitle = "";
+      $("#title").hide();
+      function reloadTitle() {
+        url = "http://localhost:8000/title"
+        $.get(url,{ "_": $.now() }, function(data){
+          console.log("here", data)
+          if (data != oldTitle) {
+            $("#title").fadeIn(300)
+            $( "#title" ).text(data);
+            } else {
+            $("#title").fadeOut(300);
+          }
+          oldTitle = data;
+        });
+      }
 
-
+      //reloadVideo()
+      //reloadTitle()
+      setInterval(reloadVideo, 50)
+      setInterval(reloadTitle, 1000)
     </script>
   </body>
 </html>
