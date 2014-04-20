@@ -160,52 +160,5 @@ int main(int argc, char **argv){
   }
   exit(1);
 
-  /*
-      ph_imagepoint *dp = NULL;
-  char *dir_name1 = "./ref_images/ham"; //argv[1];
-  char *dir_name2 = argv[2];
-  struct dirent *dir_entry;
-  vector<ph_imagepoint> hashlist1; //for hashes in first directory
-  vector<ph_imagepoint> hashlist2; //for hashes in second directory
-
-  //first directory
-  handle(&dir_name1, &dir_entry, &hashlist1, &dp);
-
-  //second directory
-  handle(&dir_name2, &dir_entry, &hashlist2, &dp);
-
-  int nbfiles1 = hashlist1.size();
-  int nbfiles2 = hashlist2.size();
-
-  int distance = -1;
-  printf("**************************\n");
-  printf("intra distance comparisons\n");
-  printf("**************************\n");
-  for (i=0;i<nbfiles;i++){
-    printf(" %d %s %s ",i,hashlist1[i].id, hashlist2[i].id);
-
-    //calculate distance
-    distance = ph_hamming_distance(hashlist1[i].hash,hashlist2[i].hash);
-
-    printf(" dist = %d\n",distance);
-  }
-
-  printf("**************************\n");
-  printf("inter distance comparisons\n");
-  printf("**************************\n");
-  for (int i=0;i<nbfiles1;i++){
-    for (int j=0;j<nbfiles2;j++){
-      printf(" %s %s ", hashlist1[i].id, hashlist2[j].id);
-
-      //calculate distance
-      distance = ph_hamming_distance(hashlist1[i].hash,hashlist2[j].hash);
-
-      printf(" dist = %d\n",distance);
-    }
-    printf("\n");
-  }
-  printf("**************************\n");
-  */
-
   return 0;
 }
