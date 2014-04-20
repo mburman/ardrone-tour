@@ -113,29 +113,45 @@ int main(int argc, char **argv){
   const char *msg = ph_about();
   printf(" %s\n", msg);
 
-  if (argc < 2){
+  if (argc < 3){
     printf("no input args\n");
-    printf("expected: \"test_imagephash [dir name]\"\n");
+    printf("expected: \"test_imagephash [image dir] [ref dir]\"\n");
+    printf("there should only be one image in [image dir]\n");
     exit(1);
   }
 
-  // PRECOMPUTE HASHES FIRST.
+  printf("Computing hash for image.");
+  ph_imagepoint *dp = NULL;
+  char *image_dir_name = argv[1];
+  struct dirent *dir_entry;
+  vector<ph_imagepoint> image_hash_list;
+  handle(&image_dir_name, &dir_entry, &image_hash_list, &dp);
+
+  printf("Computing ref hashes.");
   DIR *dir;
   struct dirent *ent;
   char *dir_name = (char*) malloc(sizeof(char) *100);
-  if ((dir = opendir (argv[1])) != NULL) {
+  if ((dir = opendir (argv[2])) != NULL) {
     // Iterate through every file in the directory.
     while ((ent = readdir (dir)) != NULL) {
       if (strcmp(ent->d_name,".") && strcmp(ent->d_name,"..")) {
-        strcpy(dir_name, argv[1]);
+        strcpy(dir_name, argv[2]);
         strcat(dir_name, "/");
         strcat(dir_name, ent->d_name);
-        printf ("%s\n", dir_name);
+        // printf ("%s\n", dir_name);
 
-        ph_imagepoint *dp = NULL;
-        struct dirent *dir_entry;
+        //struct dirent *dir_entry;
         vector<ph_imagepoint> hashlist; //= new vector<ph_imagepoint>();
         handle(&dir_name, &dir_entry, &hashlist, &dp);
+
+        int distance = -1;
+        for (int i=0; i<hashlist.size(); i++){
+          printf(" %s %s ", hashlist[i].id, image_hash_list[0].id);
+          //calculate distance
+          distance = ph_hamming_distance(hashlist[i].hash, image_hash_list[0].hash);
+          printf(" dist = %d\n",distance);
+        }
+        printf("\n");
       }
     }
     closedir (dir);
@@ -144,6 +160,7 @@ int main(int argc, char **argv){
   }
   exit(1);
 
+  /*
       ph_imagepoint *dp = NULL;
   char *dir_name1 = "./ref_images/ham"; //argv[1];
   char *dir_name2 = argv[2];
@@ -161,7 +178,7 @@ int main(int argc, char **argv){
   int nbfiles2 = hashlist2.size();
 
   int distance = -1;
-/*  printf("**************************\n");
+  printf("**************************\n");
   printf("intra distance comparisons\n");
   printf("**************************\n");
   for (i=0;i<nbfiles;i++){
@@ -172,7 +189,6 @@ int main(int argc, char **argv){
 
     printf(" dist = %d\n",distance);
   }
-*/
 
   printf("**************************\n");
   printf("inter distance comparisons\n");
@@ -189,7 +205,7 @@ int main(int argc, char **argv){
     printf("\n");
   }
   printf("**************************\n");
-
+  */
 
   return 0;
 }
