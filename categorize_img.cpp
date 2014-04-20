@@ -113,31 +113,52 @@ int main(int argc, char **argv){
   const char *msg = ph_about();
   printf(" %s\n", msg);
 
-  if (argc < 3){
+  if (argc < 2){
     printf("no input args\n");
-    printf("expected: \"test_imagephash [dir name] [dir_name]\"\n");
+    printf("expected: \"test_imagephash [dir name]\"\n");
     exit(1);
   }
 
-  char *dir_name = argv[1];
+  // PRECOMPUTE HASHES FIRST.
+  DIR *dir;
+  struct dirent *ent;
+  char *dir_name = (char*) malloc(sizeof(char) *100);
+  if ((dir = opendir (argv[1])) != NULL) {
+    // Iterate through every file in the directory.
+    while ((ent = readdir (dir)) != NULL) {
+      if (strcmp(ent->d_name,".") && strcmp(ent->d_name,"..")) {
+        strcpy(dir_name, argv[1]);
+        strcat(dir_name, "/");
+        strcat(dir_name, ent->d_name);
+        printf ("%s\n", dir_name);
+
+        ph_imagepoint *dp = NULL;
+        struct dirent *dir_entry;
+        vector<ph_imagepoint> hashlist; //= new vector<ph_imagepoint>();
+        handle(&dir_name, &dir_entry, &hashlist, &dp);
+      }
+    }
+    closedir (dir);
+  } else {
+    printf("ERROR: could not open directory");
+  }
+  exit(1);
+
+      ph_imagepoint *dp = NULL;
+  char *dir_name1 = "./ref_images/ham"; //argv[1];
   char *dir_name2 = argv[2];
   struct dirent *dir_entry;
   vector<ph_imagepoint> hashlist1; //for hashes in first directory
   vector<ph_imagepoint> hashlist2; //for hashes in second directory
-  ph_imagepoint *dp = NULL;
 
   //first directory
-  handle(&dir_name, &dir_entry, &hashlist1, &dp);
+  handle(&dir_name1, &dir_entry, &hashlist1, &dp);
 
   //second directory
   handle(&dir_name2, &dir_entry, &hashlist2, &dp);
 
   int nbfiles1 = hashlist1.size();
   int nbfiles2 = hashlist2.size();
-  int nbfiles = nbfiles1;
-  if (nbfiles1 != nbfiles2){
-    nbfiles = (nbfiles2 > nbfiles1) ? nbfiles2:nbfiles1;
-  }
 
   int distance = -1;
 /*  printf("**************************\n");
