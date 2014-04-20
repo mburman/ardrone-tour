@@ -29,8 +29,15 @@ pngStream
   lastPng = pngBuffer;
 });
 
+var i = 0;
 var server = http.createServer(function(req, res) {
   // SAVE ONE IN EVERY 5 of these to do recognition on.
+  if (i % 5 == 0) {
+    cv.readImage( lastPng, function(err, im) {
+      im.save("./image_dir/img.jpg");
+    }); // End readImage
+  }
+  i++
 
   if (!lastPng) {
     res.writeHead(503);

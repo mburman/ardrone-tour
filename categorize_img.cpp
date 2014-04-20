@@ -120,22 +120,13 @@ int main(int argc, char **argv){
     exit(1);
   }
 
-  printf("Computing hash for image.");
   ph_imagepoint *dp = NULL;
-  char *image_dir_name = argv[1];
   struct dirent *dir_entry;
-  vector<ph_imagepoint> image_hash_list;
-  handle(&image_dir_name, &dir_entry, &image_hash_list, &dp);
 
   printf("Precomputing ref hashes.");
   DIR *dir;
   struct dirent *ent;
   char *dir_name = (char*) malloc(sizeof(char) *100);
-
-  int shortest_distance = 50000;
-  char *shortest_id;
-  float shortest_average_distance = 50000;
-  char *shortest_average_id;
 
   vector<vector<ph_imagepoint>*> list;
 
@@ -162,47 +153,67 @@ int main(int argc, char **argv){
     printf("ERROR: could not open directory");
   }
 
-  // COMPARING HASHES TO IMAGE
-  for (int j=0; j < list.size(); j++) {
-    vector<ph_imagepoint>* hashlist = list[j];
-    int distance = -1;
-    int item_distance = 0;
-    int num_items = 0;
-    for (int i=0; i<(*hashlist).size(); i++){
-      printf(" %s %s ", (*hashlist)[i].id, image_hash_list[0].id);
-      //calculate distance
-      distance = ph_hamming_distance((*hashlist)[i].hash, image_hash_list[0].hash);
-      printf(" dist = %d\n",distance);
+  while (true) {
+    int shortest_distance = 50000;
+    char *shortest_id;
+    float shortest_average_distance = 50000;
+    char *shortest_average_id;
 
-      if (distance != 0) {
-        item_distance += distance;
-        num_items ++;
+    printf("Computing hash for image.");
+    char *image_dir_name = argv[1];
+    vector<ph_imagepoint> image_hash_list;
+    handle(&image_dir_name, &dir_entry, &image_hash_list, &dp);
+
+    // COMPARING HASHES TO IMAGE
+    for (int j=0; j < list.size(); j++) {
+      vector<ph_imagepoint>* hashlist = list[j];
+      int distance = -1;
+      int item_distance = 0;
+      int num_items = 0;
+      for (int i=0; i<(*hashlist).size(); i++){
+        printf(" %s %s ", (*hashlist)[i].id, image_hash_list[0].id);
+        //calculate distance
+        distance = ph_hamming_distance((*hashlist)[i].hash, image_hash_list[0].hash);
+        printf(" dist = %d\n",distance);
+
+        if (distance != 0) {
+          item_distance += distance;
+          num_items ++;
+        }
+
+        if (distance < shortest_distance && distance != 0) {
+          shortest_distance = distance;
+          shortest_id = (*hashlist)[i].id;
+        }
       }
 
-      if (distance < shortest_distance && distance != 0) {
-        shortest_distance = distance;
-        shortest_id = (*hashlist)[i].id;
+
+      float average_distance = (float) item_distance / (float) num_items;
+      printf("Average distance %f\n", average_distance);
+
+      if (average_distance < shortest_average_distance) {
+        shortest_average_distance = average_distance;
+        shortest_average_id = (*hashlist)[0].id;
       }
     }
+    printf("\n");
+
+    printf("Shortest distance: %d\n", shortest_distance);
+    printf("Shortest id: %s\n\n", shortest_id);
+
+    printf("Shortest average distance: %f\n", shortest_average_distance);
+    printf("Shortest average id: %s\n\n", shortest_average_id);
 
 
-    float average_distance = (float) item_distance / (float) num_items;
-    printf("Average distance %f\n", average_distance);
-
-    if (average_distance < shortest_average_distance) {
-      shortest_average_distance = average_distance;
-      shortest_average_id = (*hashlist)[0].id;
+    FILE *f = fopen("overlay", "w");
+    if (f == NULL)
+    {
+      printf("Error opening file!\n");
+      exit(1);
     }
+    fprintf(f, "%s", shortest_id);
+    fclose(f);
+    sleep(3);
   }
-  printf("\n");
-
-  printf("Shortest distance: %d\n", shortest_distance);
-  printf("Shortest id: %s\n\n", shortest_id);
-
-  printf("Shortest average distance: %f\n", shortest_average_distance);
-  printf("Shortest average id: %s\n\n", shortest_average_id);
-
-
-
-return 0;
+  return 0;
 }
