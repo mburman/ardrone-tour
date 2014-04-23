@@ -15,6 +15,42 @@
     </div>
 
     <script>
+      var names = {}
+      names['ham'] = 'Hamerschlag Hall'
+      names['wean'] = 'Wean Hall'
+      names['walking_to_the_sky'] = 'Walking to the sky'
+      names['posner'] = 'Posner Hall'
+      names['porter'] = 'Porter Hall'
+      names['hunt'] = 'Hunt Library'
+      names['baker'] = 'Baker Hall'
+      names['tepper'] = 'Tepper School of Business'
+      names['warner'] = 'Warner Hall'
+      names['skibo'] = 'Skibo Gym'
+
+      var left_names = {}
+      left_names['ham'] = 'Baker Hall'
+      left_names['wean'] = 'Hamerschlag Hall'
+      left_names['walking_to_the_sky'] = 'University Center'
+      left_names['posner'] = 'Gates Hillman Center'
+      left_names['porter'] = 'Hunt Library'
+      left_names['hunt'] = 'Tepper School of Business'
+      left_names['baker'] = 'Hunt Library'
+      left_names['tepper'] = 'Skibo Gym'
+      left_names['warner'] = 'Posner Hall'
+      left_names['skibo'] = 'Tennis Courts'
+
+      var right_names = {}
+      right_names['ham'] = 'Wean Hall'
+      right_names['wean'] = 'Doherty Hall'
+      right_names['walking_to_the_sky'] = 'Warner Hall'
+      right_names['posner'] = 'Warner Hall'
+      right_names['porter'] = 'Hamerschlag Hall'
+      right_names['hunt'] = 'Baker Hall'
+      right_names['baker'] = 'Doherty Hall'
+      right_names['tepper'] = 'Hunt Library'
+      right_names['warner'] = 'Forbes Avenue'
+      right_names['skibo'] = 'Tepper School of Business'
+
       function reloadVideo() {
         var video = document.getElementsByName("video")[0];
         /*$.ajax({
@@ -40,17 +76,16 @@
       function reloadOverlay() {
         url = "http://localhost:8000/overlay"
         $.get(url,{ "_": $.now() }, function(data){
-          console.log("here", data)
-          data_arr = data.split("\n")
-          if (data_arr[0] != oldoverlay) {
-            //$("#overlay").fadeIn(300)
-            $( "#overlay_text" ).text(data_arr[0]);
-            $( "#left_overlay_text" ).html("&#8592;  " + data_arr[1]);
-            $( "#right_overlay_text" ).html(data_arr[2] + "  &#8594;");
+          if (data != oldoverlay) {
+            data=data.split('-')[0]
+            data=data.trim()
+            $( "#overlay_text" ).text(names['' + data]);
+            $( "#left_overlay_text" ).html("&#8592;  " + left_names[data]);
+            $( "#right_overlay_text" ).html(right_names[data] + "  &#8594;");
             } else {
-            //$("#overlay").fadeOut(300);
+            // Cant recognize
           }
-          oldoverlay = data_arr[0];
+          oldoverlay = data;
         });
       }
 
