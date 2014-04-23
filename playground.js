@@ -5,9 +5,9 @@ var cv = require('opencv');
 var http    = require('http');
 var fs = require('fs');
 
-//drone_ip = "192.168.43.151"
-//var options = {ip:drone_ip};
-var options = {}
+drone_ip = "192.168.42.2"
+var options = {ip:drone_ip};
+//var options = {}
 var client = arDrone.createClient(options);
 //client.takeoff()
 client.disableEmergency();
@@ -26,6 +26,7 @@ pngStream
   console.log("There was an error: " + err)
 })
 .on('data', function(pngBuffer) {
+  console.log("her");
   lastPng = pngBuffer;
 });
 

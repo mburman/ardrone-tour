@@ -204,16 +204,17 @@ int main(int argc, char **argv){
     printf("Shortest average distance: %f\n", shortest_average_distance);
     printf("Shortest average id: %s\n\n", shortest_average_id);
 
-
-    FILE *f = fopen("overlay", "w");
-    if (f == NULL)
-    {
-      printf("Error opening file!\n");
-      exit(1);
+    if (shortest_distance < 20) {
+      FILE *f = fopen("overlay", "w");
+      if (f == NULL)
+      {
+        printf("Error opening file!\n");
+        exit(1);
+      }
+      fprintf(f, "%s", shortest_id);
+      fclose(f);
     }
-    fprintf(f, "%s", shortest_id);
-    fclose(f);
-    sleep(3);
+    sleep(2);
   }
   return 0;
 }

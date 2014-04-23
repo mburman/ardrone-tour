@@ -8,7 +8,7 @@
   <body>
     <div id="container" >
       <div id="title"><p> Drone Tour </p></div>
-      <div id="overlay"></div>
+      <div id="overlay"><div id="overlay_text"></div></div>
       <img id="video" name="video" style="max-width:100%">
     </div>
 
@@ -34,16 +34,16 @@
 
       // GET OVERLAY FOR IMAGE.
       oldoverlay = "";
-      $("#overlay").hide();
+      //$("#overlay").hide();
       function reloadOverlay() {
         url = "http://localhost:8000/overlay"
         $.get(url,{ "_": $.now() }, function(data){
           console.log("here", data)
           if (data != oldoverlay) {
-            $("#overlay").fadeIn(300)
-            $( "#overlay" ).text(data);
+            //$("#overlay").fadeIn(300)
+            $( "#overlay_text" ).text(data);
             } else {
-            $("#overlay").fadeOut(300);
+            //$("#overlay").fadeOut(300);
           }
           oldoverlay = data;
         });
