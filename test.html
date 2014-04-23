@@ -8,6 +8,8 @@
   <body>
     <div id="container" >
       <div id="title"><p> Drone Tour </p></div>
+      <div id="left_overlay"><div id="left_overlay_text">left left left</div></div>
+      <div id="right_overlay"><div id="right_overlay_text">right</div></div>
       <div id="overlay"><div id="overlay_text"></div></div>
       <img id="video" name="video" style="max-width:100%">
     </div>
@@ -39,13 +41,16 @@
         url = "http://localhost:8000/overlay"
         $.get(url,{ "_": $.now() }, function(data){
           console.log("here", data)
-          if (data != oldoverlay) {
+          data_arr = data.split("\n")
+          if (data_arr[0] != oldoverlay) {
             //$("#overlay").fadeIn(300)
-            $( "#overlay_text" ).text(data);
+            $( "#overlay_text" ).text(data_arr[0]);
+            $( "#left_overlay_text" ).html("&#8592;  " + data_arr[1]);
+            $( "#right_overlay_text" ).html(data_arr[2] + "  &#8594;");
             } else {
             //$("#overlay").fadeOut(300);
           }
-          oldoverlay = data;
+          oldoverlay = data_arr[0];
         });
       }
 
