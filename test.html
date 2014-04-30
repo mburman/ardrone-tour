@@ -8,14 +8,15 @@
   <body>
     <div id="container" >
       <div id="title"><p> Drone Tour </p></div>
-      <div id="left_overlay"><div id="left_overlay_text">left left left</div></div>
-      <div id="right_overlay"><div id="right_overlay_text">right</div></div>
+      <div id="left_overlay"><div id="left_overlay_text"></div></div>
+      <div id="right_overlay"><div id="right_overlay_text"></div></div>
       <div id="overlay"><div id="overlay_text"></div></div>
       <img id="video" name="video" style="max-width:100%">
     </div>
 
     <script>
       var names = {}
+      names[''] = '<NOTHING IDENTIFIED>'
       names['ham'] = 'Hamerschlag Hall'
       names['wean'] = 'Wean Hall'
       names['walking_to_the_sky'] = 'Walking to the sky'
@@ -26,6 +27,10 @@
       names['tepper'] = 'Tepper School of Business'
       names['warner'] = 'Warner Hall'
       names['skibo'] = 'Skibo Gym'
+      names['resnik'] = 'Resnik'
+      names['donner'] = 'Donner House'
+      names['uc'] = 'University Center'
+      names['gates'] = "Gates & Hillman Center"
 
       var left_names = {}
       left_names['ham'] = 'Baker Hall'
@@ -38,6 +43,10 @@
       left_names['tepper'] = 'Skibo Gym'
       left_names['warner'] = 'Posner Hall'
       left_names['skibo'] = 'Tennis Courts'
+      left_names['resnik'] = 'University Center'
+      left_names['donner'] = 'Resnik'
+      left_names['uc'] = 'Forbes Avenue'
+      left_names['gates'] = 'Wean Hall'
 
       var right_names = {}
       right_names['ham'] = 'Wean Hall'
@@ -50,6 +59,10 @@
       right_names['tepper'] = 'Hunt Library'
       right_names['warner'] = 'Forbes Avenue'
       right_names['skibo'] = 'Tepper School of Business'
+      right_names['resnik'] = 'Soccer Field'
+      right_names['donner'] = 'The Hill'
+      right_names['uc'] = 'Tennis Courts'
+      right_names['gates'] = 'UC / Posner Hall'
 
       function reloadVideo() {
         var video = document.getElementsByName("video")[0];
@@ -68,6 +81,7 @@
         */
         // video.src = "http://localhost:5555"
         $("#video").attr("src", "http://localhost:5555")
+        //$("#video").attr("src", "http://localhost:8000/ref_images/uc/uc-2.jpg")
       }
 
       // GET OVERLAY FOR IMAGE.
@@ -79,9 +93,15 @@
           if (data != oldoverlay) {
             data=data.split('-')[0]
             data=data.trim()
+            data=data.toLowerCase()
             $( "#overlay_text" ).text(names['' + data]);
-            $( "#left_overlay_text" ).html("&#8592;  " + left_names[data]);
-            $( "#right_overlay_text" ).html(right_names[data] + "  &#8594;");
+            if (data != "") { 
+              $( "#left_overlay_text" ).html("&#8592;  " + left_names[data]);
+              $( "#right_overlay_text" ).html(right_names[data] + "  &#8594;");
+            } else {
+              $( "#left_overlay_text" ).html("");
+              $( "#right_overlay_text" ).html("");
+            }
             } else {
             // Cant recognize
           }
